@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CommentService } from './../services/comment.service';
 
 @Component({
   selector: 'app-republica',
@@ -8,22 +9,32 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class RepublicaPage implements OnInit {
 
+  username = localStorage.getItem('username');
   commentForm: FormGroup;
   editCommentForm: FormGroup;
   editMode = false;
-
+  
+  //republic: number = JSON.parse(localStorage.getItem('republica'));
+  //republic_id = this.republic.id;
+  
+  
   comments = [];
 
-  constructor( public formbuilder: FormBuilder ) { 
+  constructor( public formbuilder: FormBuilder, public commentService: CommentService ) { 
+
     this.commentForm = this.formbuilder.group({
       text: [null, [Validators.required, Validators.maxLength(140)]],
     });
     this.editCommentForm = this.formbuilder.group({
       text: [null, [Validators.required, Validators.maxLength(140)]],
     });
+
   }
 
   ngOnInit() {
+
+    //console.log(this.republic_id);
+
     this.comments = [{
       id: 1,
       username: 'Kujo Jotaro',
@@ -49,12 +60,23 @@ export class RepublicaPage implements OnInit {
   sendComment(form){
     console.log(form);
     console.log(form.value);
+    this.editMode = false;
+    form.value.username = this.username;
+    this.commentService.createComment(form.value).subscribe(
+      (res) => {
+        alert(res);
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      }
+    );
   }
 
   sendEditComment(form){
     console.log(form);
     console.log(form.value);
-    this.editMode = false;
+    //form.value.republic_id = this.republic_id;
+    //form.value.username = this.username;
   }
 
   toggleEdit(id){
