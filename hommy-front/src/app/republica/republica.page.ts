@@ -41,7 +41,6 @@ export class RepublicaPage implements OnInit {
   sendComment(form){
     console.log(form);
     console.log(form.value);
-    this.editMode = false;
     form.value.username = this.username;
     form.value.republic_id = this.republic.id;
     this.commentService.createComment(form.value).subscribe(
@@ -67,13 +66,14 @@ export class RepublicaPage implements OnInit {
   }
 
 
-  //como uso o subscribe?
   sendEditComment(form){
     console.log(form);
     console.log(form.value);
     this.commentService.updateComment(form.value, this.commentId).subscribe(
       (res) => {
+        this.editMode = false;
         console.log(res);
+        this.republicWithComments();
       }, (err) => {
         console.log(err);
       }
@@ -88,6 +88,13 @@ export class RepublicaPage implements OnInit {
 
   deleteComment(id){
     console.log('Mais que cancelado: ' + id);
+    this.commentService.deleteComment(id).subscribe(
+      (res) => {
+        console.log(res);
+        this.republicWithComments();
+      }, (err) => {
+        console.log(err.error);
+      }
+    );
   }
-
 }

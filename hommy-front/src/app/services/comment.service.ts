@@ -23,4 +23,8 @@ export class CommentService {
     return this.http.get(this.apiURL + 'showRepublicWithComments/' + id);
   }
 
+  deleteComment(id): Observable<any>{
+    return this.http.delete(this.apiURL + 'deleteComment/' + id);
+  }
+
 }

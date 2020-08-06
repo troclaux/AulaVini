@@ -33,10 +33,10 @@ class CommentController extends Controller
         $comment = Comment::find($comment_id);
         if($comment){
             Comment::destroy($comment_id);
-            return response()->json(['O seu comentário foi deletado com sucesso.'],200);
+            return response()->json('O seu comentário foi deletado com sucesso.',200);
         }
         else { 
-           return response()->json(['Ocorreu um erro ao deletar o comentário.'],404);
+            return response()->json('Ocorreu um erro ao deletar o comentário.',404);
         }
     }
     
