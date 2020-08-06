@@ -13,9 +13,10 @@ export class RepublicaPage implements OnInit {
   commentForm: FormGroup;
   editCommentForm: FormGroup;
   editMode = false;
+
+  commentId: number;
   
-  //republic: number = JSON.parse(localStorage.getItem('republica'));
-  //republic_id = this.republic.id;
+  republic = JSON.parse(localStorage.getItem('republica'));
   
   
   comments = [];
@@ -33,28 +34,8 @@ export class RepublicaPage implements OnInit {
 
   ngOnInit() {
 
-    //console.log(this.republic_id);
+    this.republicWithComments();
 
-    this.comments = [{
-      id: 1,
-      username: 'Kujo Jotaro',
-      text: 'Oraoraoraoraoraoraororaoraoraoraoroaroarraoao!'
-    },
-    {
-      id: 2,
-      username: 'Josuke Higashikata',
-      text: 'Dorarararararararararararara!'
-    },
-    {
-      id: 3,
-      username: 'Joseph Joestar',
-      text: 'Oh my god!!!'
-    },
-    {
-      id: 4,
-      username: 'Giorno Giovanna',
-      text: 'Mudamudamudamudamudamudamuda!'
-    }];
   }
 
   sendComment(form){
@@ -62,9 +43,36 @@ export class RepublicaPage implements OnInit {
     console.log(form.value);
     this.editMode = false;
     form.value.username = this.username;
+    form.value.republic_id = this.republic.id;
     this.commentService.createComment(form.value).subscribe(
       (res) => {
-        alert(res);
+        console.log(res);
+        this.republicWithComments();
+      }, (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  republicWithComments(){
+    this.commentService.showRepublicWithComments(this.republic.id).subscribe(
+      (res) => {
+        console.log(res);
+        this.comments = res.comments;
+      }, (err) => {
+        console.log(err);
+      }
+    );
+
+  }
+
+
+  //como uso o subscribe?
+  sendEditComment(form){
+    console.log(form);
+    console.log(form.value);
+    this.commentService.updateComment(form.value, this.commentId).subscribe(
+      (res) => {
         console.log(res);
       }, (err) => {
         console.log(err);
@@ -72,16 +80,10 @@ export class RepublicaPage implements OnInit {
     );
   }
 
-  sendEditComment(form){
-    console.log(form);
-    console.log(form.value);
-    //form.value.republic_id = this.republic_id;
-    //form.value.username = this.username;
-  }
-
   toggleEdit(id){
+    this.commentId = id;
     this.editMode = true;
-    console.log(id)
+    console.log(this.commentId);
   }
 
   deleteComment(id){

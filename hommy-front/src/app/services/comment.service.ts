@@ -15,4 +15,12 @@ export class CommentService {
     return this.http.post(this.apiURL + 'createComment', form);
   }
 
+  updateComment(form, id): Observable<any>{
+    return this.http.put(this.apiURL + 'updateComment/' + id , form);
+  }
+
+  showRepublicWithComments(id): Observable<any>{
+    return this.http.get(this.apiURL + 'showRepublicWithComments/' + id);
+  }
+
 }

@@ -20,15 +20,15 @@ class CommentController extends Controller
         $comment->save();
         return response()->json($comment);
     }
-
+    
     public function showRepublicWithComments($id){
         $resposta = [];
         $republic = Republic::findOrFail($id);
         $comments = Republic::findOrFail($id)->comments()->get();
         array_push( $resposta, ["republic" => $republic, "comments" => $comments] );
         return response()->json($resposta[0]);
-    }
-
+    }    
+    
     public function deleteComment($comment_id) {
         $comment = Comment::find($comment_id);
         if($comment){
@@ -39,7 +39,7 @@ class CommentController extends Controller
            return response()->json(['Ocorreu um erro ao deletar o comentário.'],404);
         }
     }
-
+    
     public function updateComment($comment_id ,Request $request){
         $comment = Comment::findOrFail($comment_id);
         $comment->text = $request->text;
